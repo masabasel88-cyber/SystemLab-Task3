@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Table</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+    .controls { margin-bottom: 15px; display: flex; gap: 10px; }
+    input[type="text"] { padding: 8px; flex-grow: 1; }
+    button { padding: 8px 12px; cursor: pointer; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+    th { background-color: #f4f4f4; }
+  </style>
+</head>
+<body>
+
+  <h2>Users Data</h2>
+  
+  <div class="controls">
+    <input type="text" id="searchInput" placeholder="Search by name...">
+    <button id="sortName">Sort by Name</button>
+    <button id="sortAge">Sort by Age</button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Age</th>
+        <th>City</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody">
+    </tbody>
+  </table>
+
+  <script>
+    let users = [
+      { name: "Sara", age: 22, city: "Cairo" },
+      { name: "Omar", age: 30, city: "Alexandria" },
+      { name: "Ali", age: 19, city: "Damascus" },
+      { name: "Mona", age: 25, city: "Amman" }
+    ];
+
+    const tableBody = document.querySelector("#tableBody");
+    const searchInput = document.querySelector("#searchInput");
+    const sortNameBtn = document.querySelector("#sortName");
+    const sortAgeBtn = document.querySelector("#sortAge");
+
+    function renderTable(dataArray) {
+      tableBody.innerHTML = ""; 
+      dataArray.forEach(user => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${user.name}</td>
+          <td>${user.age}</td>
+          <td>${user.city}</td>
+        `;
+        tableBody.appendChild(tr);
+      });
+    }
+
+    renderTable(users);
+
+    searchInput.addEventListener("input", (e) => {
+      const searchTerm = e.target.value.toLowerCase();
+      const filteredUsers = users.filter(user => 
+        user.name.toLowerCase().includes(searchTerm)
+      );
+      renderTable(filteredUsers);
+    });
+
+    sortNameBtn.addEventListener("click", () => {
+      users.sort((a, b) => a.name.localeCompare(b.name));
+      renderTable(users);
+    });
+
+    sortAgeBtn.addEventListener("click", () => {
+      users.sort((a, b) => a.age - b.age);
+      renderTable(users);
+    });
+  </script>
+</body>
+</html>
